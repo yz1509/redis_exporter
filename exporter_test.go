@@ -351,6 +351,7 @@ func TestSlowLog(t *testing.T) {
 }
 
 func setupDBKeys(t *testing.T, uri string) error {
+	t.Errorf("uri %s", uri)
 	c, err := redis.DialURL(uri)
 	if err != nil {
 		t.Errorf("couldn't setup redis for uri %s, err: %s ", uri, err)
@@ -1409,6 +1410,21 @@ func TestConnectionDurations(t *testing.T) {
 	}
 }
 
+func TestSlaveMetricsLabelValues(t *testing.T) {
+	/*
+		Metrics:
+			master_link_up
+			master_last_io_seconds_ago
+			slave_repl_offset
+			master_sync_in_progress
+			slave_info
+		Labels:
+			master_host
+			master_port
+	*/
+
+}
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 
@@ -1419,6 +1435,8 @@ func init() {
 	} else {
 		log.SetLevel(log.InfoLevel)
 	}
+
+	// log.SetLevel(log.DebugLevel)
 
 	for _, n := range []string{"john", "paul", "ringo", "george"} {
 		key := fmt.Sprintf("key_%s_%d", n, ts)
